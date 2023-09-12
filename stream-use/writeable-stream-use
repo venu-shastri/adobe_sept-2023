@@ -1,0 +1,25 @@
+var chance = require('chance').Chance();
+require('http').createServer(function (req, res) {
+res.writeHead(200, {'Content-Type': 'text/plain'}); //[1]
+while(chance.bool({likelihood: 95})) { //[2]
+res.write(chance.string() + '\n'); //[3]
+}
+res.end('\nThe end...\n'); //[4]
+res.on('finish', function() { //[5]
+console.log('All data was sent');
+});
+}).listen(8080, function () {
+console.log('Listening');
+});
+
+1.We first write the head of the HTTP response. Note that writeHead() is not
+a part of the Writable interface; in fact, it's an auxiliary method exposed by
+the http.ServerResponse class.
+2. We start a loop that terminates with a likelihood of five percent (we instruct
+chance.bool() to return true for 95 percent of the time).
+3. Inside the loop, we write a random string into the stream.
+4. Once we are out of the loop, we call end() on the stream, indicating that no
+more data will be written. Also, we provide a final string to be written into
+the stream before ending it.
+5. Finally, we register a listener for the finish event, which will be fired when
+all the data has been flushed into the underlying socket.
