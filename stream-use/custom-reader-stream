@@ -1,0 +1,45 @@
+var stream = require('stream');
+var util = require('util');
+var chance = require('chance').Chance();
+/*
+1.The encoding argument that is used to convert Buffers to Strings
+(defaults to null)
+2.A flag to enable the object mode (objectMode defaults to false)
+3.The upper limit of the data stored in the internal buffer after which no more
+reading from the source should be done (highWaterMark defaults to 16 KB
+
+  */
+function RandomStream(options) {
+stream.Readable.call(this, options);
+}
+util.inherits(RandomStream, stream.Readable);
+
+RandomStream.prototype._read = function(size) {
+var chunk = chance.string(); //[1]
+console.log('Pushing chunk of size:' + chunk.length);
+this.push(chunk, 'utf8'); //[2]
+if(chance.bool({likelihood: 5})) { //[3]
+this.push(null);
+}
+}
+module.exports = RandomStream;
+/*
+1.The method generates a random string using chance.
+2. It pushes the string into the internal reading buffer. Note that, since we are
+pushing a String, we also specify the encoding, utf8 (this is not necessary
+if the chunk is simply a binary Buffer).
+3. It terminates the stream randomly, with a likelihood of 5 percent, by pushing
+null into the internal buffer to indicate an EOF situation or, in other words,
+the end of the stream.
+*/
+
+var RandomStream = require('./randomStream');
+var randomStream = new RandomStream();
+randomStream.on('readable', function() {
+var chunk;
+while((chunk = randomStream.read()) !== null) {
+console.log("Chunk received: " + chunk.toString());
+}
+});
+
+  
