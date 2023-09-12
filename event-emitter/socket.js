@@ -28,3 +28,15 @@ Socket.prototype.listen=function(cb){
         //ListenCompleted
     },1000);
 }
+
+/*
+ let socketInstance=new Socket();
+    socketInstance.open((message)=>{
+        console.log(message);
+        socketInstance.listen((message)=>{
+            console.log(message);
+        });
+    });
+    
+    socketInstance.on("open",(message)=>{});
+    */
