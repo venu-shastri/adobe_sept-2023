@@ -1,6 +1,6 @@
-# 06-web-spider-v3
+# 04-web-spider-v2
 
-Web spider example to demonstrate unlimited parallel execution.
+Web spider example to demonstrate sequential callbacks
 
 ## Run
 

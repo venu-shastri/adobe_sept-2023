@@ -31,28 +31,29 @@ function download (url, filename, cb) {
 
 function spiderLinks (currentUrl, body, nesting, cb) {
   if (nesting === 0) {
+    // Remember Zalgo?
     return process.nextTick(cb)
   }
 
-  const links = getPageLinks(currentUrl, body)
+  const links = getPageLinks(currentUrl, body) // [1]
   if (links.length === 0) {
     return process.nextTick(cb)
   }
 
-  let completed = 0
-  let hasErrors = false
-
-  function done (err) {
-    if (err) {
-      hasErrors = true
-      return cb(err)
-    }
-    if (++completed === links.length && !hasErrors) {
+  function iterate (index) { // [2]
+    if (index === links.length) {
       return cb()
     }
+
+    spider(links[index], nesting - 1, function (err) { // [3]
+      if (err) {
+        return cb(err)
+      }
+      iterate(index + 1)
+    })
   }
 
-  links.forEach(link => spider(link, nesting - 1, done))
+  iterate(0) // [4]
 }
 
 export function spider (url, nesting, cb) {
@@ -63,6 +64,7 @@ export function spider (url, nesting, cb) {
         return cb(err)
       }
 
+      // The file doesn't exist, so let’s download it
       return download(url, filename, (err, requestContent) => {
         if (err) {
           return cb(err)
@@ -72,6 +74,7 @@ export function spider (url, nesting, cb) {
       })
     }
 
+    // The file already exists, let’s process the links
     spiderLinks(url, fileContent, nesting, cb)
   })
 }
