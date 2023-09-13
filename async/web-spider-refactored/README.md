@@ -1,4 +1,4 @@
-# 02-web-spider-functions
+# web-spider-refactored
 
 Refactored version of web spider that cleans up callback hell.
 
