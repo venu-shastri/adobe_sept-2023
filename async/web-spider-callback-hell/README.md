@@ -1,6 +1,6 @@
-# 01-web-spider
+# web-spider-callback-hell
 
-First version of web spider that demonstrates CPS and callback hell.
+First version of web spider that demonstrates  callback hell.
 
 ## Run
 
