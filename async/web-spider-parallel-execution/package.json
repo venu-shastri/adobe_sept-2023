@@ -1,5 +1,5 @@
 {
-  "name": "06-web-spider-v3",
+  "name": "web-spider-parallel-execution",
   "version": "1.0.0",
   "engines": {
     "node": ">=14"
